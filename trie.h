@@ -9,3 +9,4 @@ TrieNode* init_trie(void);
 void insert_trie(TrieNode* tn, char* s);
 void print_trie(TrieNode* tn);
 bool trie_contains(TrieNode* tn, char* s);
+int test_trie(void);
