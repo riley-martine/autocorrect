@@ -4,10 +4,12 @@
 #include <argp.h>
 #include <regex.h>
 #include "llist_queue.h"
-
+#include "dictfreq.h"
 
 Queue* parse_file(FILE* fp);
 bool is_part_of_word(char* s);
+regex_t* get_word_regex(void);
+void free_word_regex(void);
 
 //  https://stackoverflow.com/questions/9642732/parsing-command-line-arguments
 //  https://www.gnu.org/software/libc/manual/html_node/Argp-Example-3.html#Argp-Example-3
@@ -79,36 +81,60 @@ int main(int argc, char *argv[]) {
     Queue* file_parts = parse_file(fp);
     fclose(fp);
 
+    bool cur_is_word = is_part_of_word(peek(file_parts));
+    while (! isEmpty(file_parts)) {
+        if (cur_is_word) {
+            if (is_dictionary_word(peek(file_parts))) {
+                printf("%s", peek(file_parts));
+            } else {
+                printf("|%s|", peek(file_parts));
+            }
+        } else {
+            printf("%s", peek(file_parts));
+        }
+        cur_is_word = !cur_is_word;
+        pop(file_parts);
+    }
+
+    free_dict();
+    clear(file_parts);
+    free_word_regex();
     return 0;
 }
 
-
-bool is_part_of_word(char* s) {
-    static bool firstrun = true;
-    static regex_t exp;
-    bool word = true;
-    int rv;
-    if (firstrun){
-        if ( 0 != (rv = regcomp(&exp, "[^a-zA-Z']", REG_EXTENDED))) {
-            printf("regcomp() failed, returning nonzero (%d)\n", rv);
+regex_t* get_word_regex(void) {
+    static regex_t* exp;
+    
+    if (exp == NULL) {
+        exp = malloc(sizeof(regex_t));
+        if ( 0 != (regcomp(exp, "[^a-zA-Z']", REG_EXTENDED))) {
+            printf("regcomp() failed, returning nonzero.\n");
             exit(EXIT_FAILURE);
         }
-        firstrun = false;
     }
-    if (! regexec(&exp, s, 0, NULL, 0)) {
+
+    return exp;
+
+}
+
+void free_word_regex(void) {
+    free(get_word_regex());
+}
+
+bool is_part_of_word(char* s) {
+    bool word = true;
+    regex_t* exp = get_word_regex();
+
+    if (! regexec(exp, s, 0, NULL, 0)) {
         // match is true
         word = false;
-        //puts("MATCH");
     }
-    if (s[0] == '\0') {
-        regfree(&exp);
-    }
+
     return word;
 }
 
 Queue* parse_file(FILE* fp) {
     Queue* queue = initQueue();
-
 
     char* token = calloc(128, sizeof(char)); 
     //for(int i = 0; i < 32; i++){
@@ -155,6 +181,6 @@ Queue* parse_file(FILE* fp) {
 
     }
 
-    printQueue(queue);
+    //printQueue(queue);
     return queue;
 }
