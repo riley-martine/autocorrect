@@ -17,7 +17,7 @@
 #endif
 
 
-int main(void) {
+int test_trie(void) {
 
     TrieNode* tn = init_trie();
 
@@ -105,6 +105,9 @@ void print_trie(TrieNode* tn) {
 }
 
 void insert_trie(TrieNode* tn, char* s) {
+    if(s[0] == 'h'){
+        d_printf("Attempting to insert: %s\n", s);
+    }
     TrieNode* cur = tn;
     TrieNode* prev = NULL;
     
@@ -158,7 +161,7 @@ void insert_trie(TrieNode* tn, char* s) {
         if (prev == NULL) { // we are on first character
             d_puts("Prev is null");
             if (strlen(ss) == 0) {
-                prev->is_word = true;
+                cur->is_word = true;
                 return;
             }
             if (cur->child == NULL) {

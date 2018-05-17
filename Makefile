@@ -4,7 +4,7 @@ CFLAGS = -g -Wall -Wextra -Wlogical-op -Wjump-misses-init -Wdouble-promotion -Ws
 all: spellcheck
 
 spellcheck: spellcheck.c
-	$(CC) $(CFLAGS) spellcheck.c llist_queue.c dictfreq.c -o spellcheck
+	$(CC) $(CFLAGS) spellcheck.c llist_queue.c dictfreq.c trie.c -o spellcheck
 
 dictfreq: dictfreq.c
 	$(CC) $(CFLAGS) dictfreq.c -o dictfreq

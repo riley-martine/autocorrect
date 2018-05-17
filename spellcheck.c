@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
     bool cur_is_word = is_part_of_word(peek(file_parts));
     while (! isEmpty(file_parts)) {
         if (cur_is_word) {
-            if (is_dictionary_word(peek(file_parts))) {
+            if (is_trie_word(peek(file_parts))) {
                 printf("%s", peek(file_parts));
             } else {
                 printf("|%s|", peek(file_parts));

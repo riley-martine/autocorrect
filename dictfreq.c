@@ -17,6 +17,42 @@
 // I will use a prefix tree/radix tree/trie, because
 //     it is simpler than hash maps and thus easier
 //     to reason about and harder to mess up.
+
+TrieNode* get_words(void) {
+    static TrieNode* tn = NULL;
+    if(tn == NULL) {
+        tn = init_trie();
+        insert_trie(tn, "hypo");
+        insert_trie(tn, "hyp");
+        
+        
+        char* line = NULL;
+        size_t len = 0;
+        ssize_t read;
+        FILE* fp = fopen("words.txt", "r");
+        while ((read = getline(&line, &len, fp)) != -1) {
+            if ((line)[read - 1] == '\n') {
+                (line)[read - 1] = '\0';
+                --read;
+            }
+            insert_trie(tn, line);
+        }
+        fclose(fp);
+
+        free(line);
+
+        insert_trie(tn, "This");
+        insert_trie(tn, "is");
+    }
+    return tn;
+}
+
+bool is_trie_word(char* s) {
+    TrieNode* tn = get_words();
+    return trie_contains(tn, s);
+}
+    
+
 char* dict_file_contents(void) {
     static char* contents = NULL;
 
