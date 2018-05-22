@@ -6,6 +6,7 @@ typedef struct trie_node {
 } TrieNode;
 
 TrieNode* init_trie(void);
+void free_trie(TrieNode* tn);
 void insert_trie(TrieNode* tn, char* s);
 void print_trie(TrieNode* tn);
 bool trie_contains(TrieNode* tn, char* s);

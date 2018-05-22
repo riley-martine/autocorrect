@@ -13,7 +13,7 @@ void free_word_regex(void);
 
 //  https://stackoverflow.com/questions/9642732/parsing-command-line-arguments
 //  https://www.gnu.org/software/libc/manual/html_node/Argp-Example-3.html#Argp-Example-3
-const char *argp_program_version = "AutoCheck 0.0.0";
+const char *argp_program_version = "AutoCheck 0.1.0";
 const char *argp_program_bug_address = "riley.martine.0@gmail.com";
 static char doc[] = "Looks for words in a file not in the dictionary, and prompts to replace them.";
 static char args_doc[] = "[FILENAME]";
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
         pop(file_parts);
     }
 
-    free_dict();
+    free_trie(get_words());
     clear(file_parts);
     free_word_regex();
     return 0;

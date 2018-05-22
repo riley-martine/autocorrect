@@ -22,9 +22,6 @@ TrieNode* get_words(void) {
     static TrieNode* tn = NULL;
     if(tn == NULL) {
         tn = init_trie();
-        insert_trie(tn, "hypo");
-        insert_trie(tn, "hyp");
-        
         
         char* line = NULL;
         size_t len = 0;
@@ -40,9 +37,6 @@ TrieNode* get_words(void) {
         fclose(fp);
 
         free(line);
-
-        insert_trie(tn, "This");
-        insert_trie(tn, "is");
     }
     return tn;
 }

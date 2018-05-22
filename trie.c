@@ -69,6 +69,22 @@ TrieNode* init_trie(void) {
 }
 
 
+void free_trie(TrieNode* tn) {
+    TrieNode* cur = tn;
+    TrieNode* next;
+    
+    while (cur != NULL) {
+        next = cur->next;
+        free(cur);
+        cur = next;
+    }
+    if (tn->child != NULL) {
+        free_trie(tn->child);
+    }
+
+}
+
+
 bool trie_contains(TrieNode* tn, char* s) {
     TrieNode* cur = tn;
 
@@ -89,7 +105,6 @@ bool trie_contains(TrieNode* tn, char* s) {
 
 void print_trie(TrieNode* tn) {
     TrieNode* cur_base = tn;
-    TrieNode* prev;
     while (cur_base != NULL) {
         d_puts("Not null");
         printf("%c", cur_base->symbol);
@@ -98,7 +113,6 @@ void print_trie(TrieNode* tn) {
             printf("|");
         }
         print_trie(cur_base->child);
-        prev = cur_base;
         cur_base = cur_base->next;
     }
     return;
